@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Config;
 
 class Kernel extends ConsoleKernel
 {
@@ -13,14 +14,49 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
-    protected function schedule(Schedule $schedule)
+    protected function schedule(Schedule $schedule): void
     {
-        $hour = config('app.hour');
-        $min = config('app.min');
-        $scheduledInterval = $hour !== '' ? (($min !== '' && $min != 0) ?  $min . ' */' . $hour . ' * * *' : '0 */' . $hour . ' * * *') : '*/' . $min . ' * * * *';
-        if (env('IS_DEMO')) {
-            $schedule->command('app:reset-default-users')->cron($scheduledInterval);
+        $this->scheduleResetUsersCommand($schedule);
+    }
+
+    /**
+     * Schedule the reset users command in demo mode
+     *
+     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @return void
+     */
+    protected function scheduleResetUsersCommand(Schedule $schedule): void
+    {
+        if (!Config::get('app.demo', false)) {
+            return;
         }
+
+        $hour = Config::get('app.hour', '');
+        $min = Config::get('app.min', '');
+        
+        $scheduledInterval = $this->buildCronExpression($hour, $min);
+        $schedule->command('app:reset-default-users')
+            ->cron($scheduledInterval)
+            ->withoutOverlapping()
+            ->runInBackground();
+    }
+
+    /**
+     * Build cron expression based on configured hour and minute
+     *
+     * @param  string  $hour
+     * @param  string  $min
+     * @return string
+     */
+    protected function buildCronExpression(string $hour, string $min): string
+    {
+        if ($hour !== '') {
+            return $min !== '' && $min != '0' 
+                ? "{$min} */{$hour} * * *" 
+                : "0 */{$hour} * * *";
+        }
+        
+        return "*/{$min} * * * *";
     }
 
     /**
@@ -28,7 +64,7 @@ class Kernel extends ConsoleKernel
      *
      * @return void
      */
-    protected function commands()
+    protected function commands(): void
     {
         $this->load(__DIR__.'/Commands');
 
