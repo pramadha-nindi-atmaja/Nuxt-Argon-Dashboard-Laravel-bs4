@@ -222,6 +222,11 @@
       </base-dropdown>
     </ul>
     <ul class="navbar-nav align-items-center ml-auto ml-md-0">
+      <!-- Dark Mode Toggle -->
+      <li class="nav-item d-flex align-items-center mr-3">
+        <dark-mode-toggle @dark-mode-changed="handleDarkModeChange" />
+      </li>
+      
       <base-dropdown
         menu-on-right
         class="nav-item"
@@ -271,6 +276,8 @@
 import { CollapseTransition } from "vue2-transitions";
 import BaseNav from "@/components/argon-core/Navbar/BaseNav.vue";
 import Modal from "@/components/argon-core/Modal.vue";
+import DarkModeToggle from "@/components/widgets/DarkModeToggle.vue";
+import { updateChartTheme } from "@/components/argon-core/Charts/config";
 import { pick, merge } from "lodash";
 
 export default {
@@ -278,6 +285,7 @@ export default {
     CollapseTransition,
     BaseNav,
     Modal,
+    DarkModeToggle,
   },
   props: {
     type: {
@@ -293,9 +301,16 @@ export default {
       return this.capitalizeFirstLetter(name);
     },
     profileImage() {
-      return this.$auth.user.profile_image
-        ? this.$auth.user.profile_image
-        : "/img/placeholder.jpg";
+      if (this.$auth.user.profile_image) {
+        // If profile_image is a full URL, use it directly
+        if (this.$auth.user.profile_image.startsWith('http')) {
+          return this.$auth.user.profile_image;
+        }
+        // Otherwise, construct the full URL using the API base URL
+        const baseUrl = process.env.apiUrl.replace('/api/v2', '');
+        return `${baseUrl}/storage/${this.$auth.user.profile_image}`;
+      }
+      return "/img/placeholder.jpg";
     },
   },
   data() {
@@ -329,6 +344,12 @@ export default {
         this.$toast.error(error.response.message);
       }
     },
+    handleDarkModeChange(isDarkMode) {
+      // Update chart themes
+      updateChartTheme(isDarkMode);
+      // Emit event to parent component if needed
+      this.$emit('dark-mode-changed', isDarkMode);
+    }
   },
 };
 </script>
