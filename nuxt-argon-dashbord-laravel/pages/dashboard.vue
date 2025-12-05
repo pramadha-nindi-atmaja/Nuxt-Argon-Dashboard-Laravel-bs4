@@ -77,6 +77,51 @@
           </stats-card>
         </div>
       </div>
+      
+      <!-- User Statistics Cards -->
+      <div class="row mt-4">
+        <div class="col-xl-3 col-md-6">
+          <user-stats-card
+            title="Active Users"
+            type="gradient-primary"
+            sub-title="2,356"
+            icon="ni ni-circle-08"
+            percentage="3.48"
+            since="Since last week"
+          />
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <user-stats-card
+            title="New Signups"
+            type="gradient-success"
+            sub-title="382"
+            icon="ni ni-badge"
+            percentage="12.18"
+            since="Since last week"
+          />
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <user-stats-card
+            title="Pending Requests"
+            type="gradient-warning"
+            sub-title="924"
+            icon="ni ni-watch-time"
+            percentage="-5.72"
+            percentage-icon="fa-arrow-down"
+            since="Since last week"
+          />
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <user-stats-card
+            title="User Engagement"
+            type="gradient-info"
+            sub-title="78.3%"
+            icon="ni ni-satisfied"
+            percentage="5.4"
+            since="Since last week"
+          />
+        </div>
+      </div>
     </base-header>
 
     <!--Charts-->
@@ -167,6 +212,7 @@ import BarChart from "@/components/argon-core/Charts/BarChart";
 
 import RouteBreadCrumb from "@/components/argon-core/Breadcrumb/RouteBreadcrumb";
 import StatsCard from "@/components/argon-core/Cards/StatsCard";
+import UserStatsCard from "@/components/widgets/UserStatsCard.vue";
 import SocialTrafficTable from "@/components/pages/dashboard/SocialTrafficTable.vue";
 import PageVisitsTable from "@/components/pages/dashboard/PageVisitsTable.vue";
 
@@ -183,8 +229,20 @@ export default {
     BarChart,
     RouteBreadCrumb,
     StatsCard,
+    UserStatsCard,
     PageVisitsTable,
     SocialTrafficTable,
+  },
+  mounted() {
+    // Initialize charts with correct theme
+    this.initBigChart(0);
+    
+    // Listen for dark mode changes
+    this.$root.$on('dark-mode-changed', this.handleDarkModeChange);
+  },
+  beforeDestroy() {
+    // Clean up event listener
+    this.$root.$off('dark-mode-changed', this.handleDarkModeChange);
   },
   data() {
     return {
@@ -232,10 +290,26 @@ export default {
       this.bigLineChart.chartData = chartData;
       this.bigLineChart.activeIndex = index;
     },
+    handleDarkModeChange(isDarkMode) {
+      // Reinitialize charts with new theme
+      this.$nextTick(() => {
+        if (this.$refs.bigChart && this.$refs.bigChart.chart) {
+          this.$refs.bigChart.chart.destroy();
+          this.$refs.bigChart.renderChart(
+            this.bigLineChart.chartData,
+            this.bigLineChart.extraOptions
+          );
+        }
+        if (this.$refs.barChart && this.$refs.barChart.chart) {
+          this.$refs.barChart.chart.destroy();
+          this.$refs.barChart.renderChart(
+            this.redBarChart.chartData
+          );
+        }
+      });
+    }
   },
-  mounted() {
-    this.initBigChart(0);
-  },
+
 };
 </script>
 <style>
