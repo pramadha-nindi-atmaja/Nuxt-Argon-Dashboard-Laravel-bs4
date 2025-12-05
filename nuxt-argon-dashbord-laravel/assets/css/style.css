@@ -42,3 +42,122 @@
   max-width: 100%;
   max-height: 3rem;
 }
+
+/* Dark mode styles */
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+body.dark-mode .card {
+  background-color: #1e1e1e;
+  border-color: #333;
+}
+
+body.dark-mode .card-header {
+  background-color: #252525;
+  border-color: #333;
+}
+
+body.dark-mode .card-footer {
+  background-color: #252525;
+  border-color: #333;
+}
+
+body.dark-mode .table {
+  color: #e0e0e0;
+}
+
+body.dark-mode .table thead th {
+  border-color: #333;
+}
+
+body.dark-mode .table td,
+body.dark-mode .table th {
+  border-color: #333;
+}
+
+body.dark-mode .bg-white {
+  background-color: #1e1e1e !important;
+}
+
+body.dark-mode .bg-light {
+  background-color: #252525 !important;
+}
+
+body.dark-mode .text-dark {
+  color: #e0e0e0 !important;
+}
+
+body.dark-mode .navbar-top {
+  background-color: #1e1e1e !important;
+  border-color: #333 !important;
+}
+
+body.dark-mode .navbar-vertical {
+  background-color: #1e1e1e !important;
+  border-color: #333 !important;
+}
+
+body.dark-mode .navbar-vertical .navbar-heading {
+  color: #aaa;
+}
+
+body.dark-mode .navbar-vertical .navbar-nav .nav-link {
+  color: #ccc;
+}
+
+body.dark-mode .navbar-vertical .navbar-nav .nav-link:hover {
+  color: #fff;
+  background-color: #252525;
+}
+
+body.dark-mode .navbar-vertical .navbar-nav .nav-link.active {
+  color: #fff;
+  background-color: #252525;
+}
+
+body.dark-mode .form-control {
+  background-color: #252525;
+  border-color: #333;
+  color: #e0e0e0;
+}
+
+body.dark-mode .form-control:focus {
+  background-color: #252525;
+  border-color: #555;
+  color: #e0e0e0;
+}
+
+body.dark-mode .btn-secondary {
+  background-color: #252525;
+  border-color: #333;
+  color: #e0e0e0;
+}
+
+body.dark-mode .dropdown-menu {
+  background-color: #1e1e1e;
+  border-color: #333;
+  color: #e0e0e0;
+}
+
+body.dark-mode .dropdown-item {
+  color: #e0e0e0;
+}
+
+body.dark-mode .dropdown-item:hover {
+  background-color: #252525;
+}
+
+body.dark-mode .modal-content {
+  background-color: #1e1e1e;
+  border-color: #333;
+}
+
+body.dark-mode .modal-header {
+  border-color: #333;
+}
+
+body.dark-mode .modal-footer {
+  border-color: #333;
+}
