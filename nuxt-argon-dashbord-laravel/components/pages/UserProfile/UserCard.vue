@@ -74,8 +74,9 @@ export default {
         if (this.user.profile_image.startsWith('http')) {
           return this.user.profile_image;
         }
-        // Otherwise, assume it's a relative path from storage
-        return `${process.env.apiUrl.replace('/api/v2', '')}/storage/${this.user.profile_image}`;
+        // Otherwise, construct the full URL using the API base URL
+        const baseUrl = process.env.apiUrl.replace('/api/v2', '');
+        return `${baseUrl}/storage/${this.user.profile_image}`;
       }
       // Fallback to default image
       return '/img/theme/team-4.jpg';
