@@ -2,7 +2,7 @@ import { parseOptions } from "@/components/argon-core/Charts/optionHelpers";
 import Chart from 'chart.js'
 
 export const Charts = {
-  mode: 'light',//(themeMode) ? themeMode : 'light';
+  mode: localStorage.getItem('theme') === 'dark' ? 'dark' : 'light',
   fonts: {
     base: 'Open Sans'
   },
@@ -162,6 +162,13 @@ export function initGlobalOptions() {
   }
   parseOptions(Chart, chartOptions());
   initialized = true
+}
+
+export function updateChartTheme(isDarkMode) {
+  Charts.mode = isDarkMode ? 'dark' : 'light';
+  parseOptions(Chart, chartOptions());
+  // Re-initialize charts if needed
+  window.dispatchEvent(new Event('resize'));
 }
 
 export const basicOptions = {
