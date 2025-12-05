@@ -68,13 +68,13 @@ function upload(user, image, nuxt_axios) {
 
   return axios({
     method: 'POST',
-    url: `/uploads/users/${user.id}/profile-image`,
+    url: `${url}/profile-image/upload`,
     data: payload,
     headers: {
       'Accept': 'application/vnd.api+json',
-      'Content-Type': 'application/vnd.api+json',
+      'Content-Type': 'multipart/form-data',
     }
-    }) .then(response => {
+    }).then(response => {
         return response.data.url;
       });
 }
@@ -87,4 +87,3 @@ export default {
   destroy,
   upload
 };
-

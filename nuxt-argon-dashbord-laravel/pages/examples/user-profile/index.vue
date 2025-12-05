@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="col-xl-6 order-xl-2">
-                <user-card />
+                <user-card :user="user" />
             </div>
         </div>
     </div>
@@ -38,7 +38,8 @@ export default {
             }
         }
     },
-     created() {
+    
+    created() {
       this.getProfile();
     },
 

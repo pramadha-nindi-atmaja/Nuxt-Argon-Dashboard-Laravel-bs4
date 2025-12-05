@@ -6,7 +6,7 @@
       <div class="col-lg-3 order-lg-2">
         <div class="card-profile-image">
           <a href="#">
-            <img src="/img/theme/team-4.jpg" class="rounded-circle">
+            <img :src="profileImageUrl" class="rounded-circle">
           </a>
         </div>
       </div>
@@ -40,7 +40,7 @@
       </div>
       <div class="text-center">
         <h5 class="h3">
-          Jessica Jones<span class="font-weight-light">, 27</span>
+          {{ userName }}<span class="font-weight-light">, 27</span>
         </h5>
         <div class="h5 font-weight-300">
           <i class="ni location_pin mr-2"></i>Bucharest, Romania
@@ -56,6 +56,35 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+  props: {
+    user: {
+      type: Object,
+      default: () => ({
+        name: 'Jessica Jones',
+        profile_image: null
+      })
+    }
+  },
+  
+  computed: {
+    profileImageUrl() {
+      if (this.user && this.user.profile_image) {
+        // If profile_image is a full URL, use it directly
+        if (this.user.profile_image.startsWith('http')) {
+          return this.user.profile_image;
+        }
+        // Otherwise, assume it's a relative path from storage
+        return `${process.env.apiUrl.replace('/api/v2', '')}/storage/${this.user.profile_image}`;
+      }
+      // Fallback to default image
+      return '/img/theme/team-4.jpg';
+    },
+    
+    userName() {
+      return this.user && this.user.name ? this.user.name : 'Jessica Jones';
+    }
+  }
+};
 </script>
 <style></style>

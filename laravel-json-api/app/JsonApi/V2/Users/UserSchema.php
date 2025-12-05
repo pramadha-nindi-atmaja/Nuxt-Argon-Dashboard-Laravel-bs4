@@ -33,6 +33,7 @@ class UserSchema extends Schema
             ID::make(),
             Str::make('name')->sortable(),
             Str::make('email')->sortable(),
+            Str::make('profile_image'),
             Str::make('password')->hidden(),
             Str::make('password_confirmation')->hidden(),
             DateTime::make('created_at')
